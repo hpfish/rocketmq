@@ -57,7 +57,7 @@ public class NamesrvStartup {
                 System.exit(-1);
                 return null;
             }
-
+            // 解析配置文件,填充 NamesrvConfig, NettyServerConfig 属性
             final NamesrvConfig namesrvConfig = new NamesrvConfig();
             final NettyServerConfig nettyServerConfig = new NettyServerConfig();
             nettyServerConfig.setListenPort(9876);
@@ -105,12 +105,14 @@ public class NamesrvStartup {
             // remember all configs to prevent discard
             controller.getConfiguration().registerConfig(properties);
 
+            // 根据启动属性创建 NamesrvController 实例, 该实例为 NameServer 核心控制器
             boolean initResult = controller.initialize();
             if (!initResult) {
                 controller.shutdown();
-                System.exit(-3);
+                system.exit(-3);
             }
 
+            // 注册JVM钩子函数并启动服务器,以便监听 Broker,消息生产者的网络请求
             Runtime.getRuntime().addShutdownHook(new ShutdownHookThread(log, new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
