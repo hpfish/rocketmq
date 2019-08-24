@@ -110,7 +110,7 @@ public class NamesrvStartup {
                 controller.shutdown();
                 System.exit(-3);
             }
-
+            // 注册JVM钩子函数并启动服务器,以便监听Broker,消息生产者的网络请求
             Runtime.getRuntime().addShutdownHook(new ShutdownHookThread(log, new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
